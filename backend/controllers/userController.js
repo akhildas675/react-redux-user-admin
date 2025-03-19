@@ -1,5 +1,10 @@
 import User from '../models/users.js';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+
+
+
+
 
 const userSignup = async (req, res) => {
     try {
@@ -31,4 +36,37 @@ const userSignup = async (req, res) => {
     }
 };
 
-export default { userSignup };
+const userLogin = async (req,res)=>{
+    try {
+        const {email,password}=req.body
+        if(!email ||!password){
+            return res.json({message:"require all fields for login"})
+        }
+
+        const findUser= await User.findOne({email})
+
+        if(!findUser){
+            return res.json({message:"Invalid email Id"})
+        }
+
+        const matchPassword=await bcrypt.compare(password,findUser.password)
+        if(!matchPassword){
+            return res.json({message:"Invalid Password please try again"})
+        }
+
+
+        const token=jwt.sign({userId:findUser._id},process.env.JWT_SECRET_KEY,{expiresIn:'1h'})
+
+        res.json({message:"Login successful",token})
+
+    } catch (error) {
+        console.log("Login error",error)
+        res.json({message:'Server Error'})
+    }
+}
+
+export default { 
+    userSignup,
+    userLogin,
+
+ };

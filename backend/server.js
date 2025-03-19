@@ -4,7 +4,6 @@ import cors from 'cors'
 
 import connectDB from './Config/db.js';
 
-
 import userRoute from './routes/userRoutes.js';
 import adminRoute from './routes/adminRoutes.js'
 
