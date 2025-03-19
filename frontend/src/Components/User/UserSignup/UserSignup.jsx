@@ -3,7 +3,7 @@ import { handleSubmit } from '../../../Services/UserServices/UserServices'
 
 const UserSignup = () => {
   const [formData, setFormData] = useState({
-    username: '',
+    userName: '',
     email: '',
     password: '',
   });
@@ -17,16 +17,16 @@ const UserSignup = () => {
       <h2 className="text-2xl font-bold mb-4 text-center">Sign Up</h2>
 
       <form onSubmit={(e) => handleSubmit(e, formData)}> 
-        {/* Username */}
+        {/* userName */}
         <div className="mb-4">
-          <label className="block text-gray-700 mb-1">Username</label>
+          <label className="block text-gray-700 mb-1">userName</label>
           <input
             type="text"
-            name="username"
-            value={formData.username}
+            name="userName"
+            value={formData.userName}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500"
-            placeholder="Enter username"
+            placeholder="Enter userName"
           />
         </div>
 
