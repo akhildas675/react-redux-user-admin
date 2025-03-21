@@ -1,62 +1,94 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { handleLogin } from '../../../Services/UserServices/UserServices'; 
+import { useDispatch, useSelector } from 'react-redux';
+import { setUserInfo } from '../../../Redux/Slices/UserSlice';
+import { useNavigate } from 'react-router-dom';
 
 const UserLogin = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
 
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle form submission
-  const handleSubmit = (e) => {
+  const { userInfo } = useSelector((state) => state.user);
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (userInfo && token) {
+      navigate("/home");
+    }
+  }, [userInfo, token, navigate]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    handleLogin(formData); 
+    const response = await handleLogin(formData);
+    if (response) {
+      dispatch(setUserInfo(response.user));
+      localStorage.setItem("token", response.token);
+      navigate("/home");
+    }
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 border border-gray-300 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
+    <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="w-full max-w-sm p-8 border border-gray-700 rounded-xl shadow-lg bg-gray-950">
+        <h2 className="text-3xl font-semibold mb-6 text-center text-white tracking-wide">
+          User Login
+        </h2>
 
-      <form onSubmit={handleSubmit}>
-        {/* Email */}
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-1">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500"
-            placeholder="Enter email"
-          />
-        </div>
+        <form onSubmit={handleSubmit}>
+          {/* Email Field */}
+          <div className="mb-5">
+            <label className="block text-gray-400 mb-2 text-sm">Email</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full px-4 py-2 bg-gray-800 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-gray-500"
+              placeholder="Enter email"
+            />
+          </div>
 
-        {/* Password */}
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-1">Password</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-500"
-            placeholder="Enter password"
-          />
-        </div>
+          {/* Password Field */}
+          <div className="mb-5">
+            <label className="block text-gray-400 mb-2 text-sm">Password</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full px-4 py-2 bg-gray-800 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder-gray-500"
+              placeholder="Enter password"
+            />
+          </div>
 
-        {/* Submit Button */}
+          {/* Login Button */}
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-500 transition duration-300 font-semibold tracking-wide"
+          >
+            Login
+          </button>
+        </form>
+
+        {/* Sign Up Button */}
+        <p className="text-gray-400 text-sm text-center mt-4">
+          Don't have an account?
+        </p>
         <button
-          type="submit"
-          className="w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition duration-200"
+          onClick={() => navigate("/signup")}
+          className="w-full bg-gray-700 text-white py-2 rounded-lg hover:bg-gray-600 transition duration-300 font-semibold tracking-wide mt-2"
         >
-          Login
+          Sign Up
         </button>
-      </form>
+      </div>
     </div>
   );
 };
