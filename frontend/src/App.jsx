@@ -7,7 +7,7 @@ import UserHome from './Pages/UserPages/Home';
 import UserProfile from './Pages/UserPages/Profile';
 import LoginAdmin from './Pages/AdminPages/LoginAdmin';
 import HomeAdmin from './Pages/AdminPages/HomeAdmin';
-import UserProtector from './Components/Routes/UserProtector';
+import UserProtector from './Components/Routes/Protector/UserProtector';
 import AdminProtector from './Components/Routes/Protector/AdminProtector';
 
 const App = () => {
