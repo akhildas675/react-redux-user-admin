@@ -9,7 +9,6 @@ const AdminHome = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
 
-  // State for form data (create/update)
   const [formData, setFormData] = useState({
     id: null,
     email: '',
@@ -17,11 +16,9 @@ const AdminHome = () => {
     name: '',
   });
 
-  // State for modal visibility
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
-  // Fetch users on component mount
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -34,19 +31,16 @@ const AdminHome = () => {
     fetchUsers();
   }, []);
 
-  // Handle input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle opening the "Create User" modal
   const handleCreate = () => {
     setFormData({ id: null, email: '', password: '', name: '' });
     setIsEditing(false);
     setIsModalOpen(true);
   };
 
-  // Handle opening the "Edit User" modal
   const handleEdit = (user) => {
     setFormData({
       _id: user._id,
@@ -58,7 +52,6 @@ const AdminHome = () => {
     setIsModalOpen(true);
   };
 
-  // Handle deleting a user
   const handleDelete = async (userId) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
       try {
@@ -70,7 +63,6 @@ const AdminHome = () => {
     }
   };
 
-  // Handle form submission for create/update
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -88,7 +80,6 @@ const AdminHome = () => {
     }
   };
 
-  // Handle logout
   const handleLogout = () => {
     localStorage.removeItem('token');
     dispatch(logoutUser());
@@ -98,7 +89,6 @@ const AdminHome = () => {
   return (
     <div className="min-h-screen bg-black flex flex-col items-center p-6">
       <div className="w-full max-w-4xl bg-gray-900 rounded-lg shadow-xl p-6">
-        {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold text-white">Admin User Management</h1>
           <button
@@ -109,7 +99,6 @@ const AdminHome = () => {
           </button>
         </div>
 
-        {/* Users List Section */}
         <div>
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold text-gray-200">Users List</h2>
@@ -161,7 +150,6 @@ const AdminHome = () => {
         </div>
       </div>
 
-      {/* User Modal (Create & Edit) */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-gray-900 p-6 rounded-lg shadow-lg w-96">
@@ -175,7 +163,7 @@ const AdminHome = () => {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Name"
-                className="p-3 bg-gray-800 text-white border border-gray-700 rounded focus:ring-2 focus:ring-blue-500"
+                className="p-3 bg-gray-800 text-white placeholder-gray-400 border border-gray-700 rounded focus:ring-2 focus:ring-blue-500"
                 required
               />
               <input
@@ -184,7 +172,7 @@ const AdminHome = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Email"
-                className="p-3 bg-gray-800 text-white border border-gray-700 rounded focus:ring-2 focus:ring-blue-500"
+                className="p-3 bg-gray-800 text-white placeholder-gray-400 border border-gray-700 rounded focus:ring-2 focus:ring-blue-500"
                 required
               />
               <input
@@ -193,23 +181,12 @@ const AdminHome = () => {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Password"
-                className="p-3 bg-gray-800 text-white border border-gray-700 rounded focus:ring-2 focus:ring-blue-500"
+                className="p-3 bg-gray-800 text-white placeholder-gray-400 border border-gray-700 rounded focus:ring-2 focus:ring-blue-500"
                 required={!isEditing}
               />
               <div className="flex justify-between">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-200"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition duration-200"
-                >
-                  {isEditing ? 'Update User' : 'Create User'}
-                </button>
+                <button type="button" onClick={() => setIsModalOpen(false)} className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-200">Cancel</button>
+                <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition duration-200">{isEditing ? 'Update User' : 'Create User'}</button>
               </div>
             </form>
           </div>
